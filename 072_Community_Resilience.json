@@ -3,7 +3,7 @@
   "nodes": [
     {
       "id": "n1",
-      "x": 650,
+      "x": 544,
       "y": 265.5,
       "w": 0,
       "h": 0,
@@ -19,10 +19,35 @@
       "italic": false,
       "textAlign": "left",
       "shape": "rounded"
+    },
+    {
+      "id": "n2",
+      "x": 795,
+      "y": 261.5,
+      "w": 0,
+      "h": 0,
+      "text": "1st_stage",
+      "ci": 0,
+      "link": "https://drive.google.com/drive/folders/1BKLRjQu7h9XxEwKyxapf9wzB5OxXwepG?usp=drive_link",
+      "collapsed": false,
+      "isNote": false,
+      "fontSize": 13,
+      "fontFamily": "Nunito",
+      "textColor": "",
+      "bold": false,
+      "italic": false,
+      "textAlign": "left",
+      "shape": "rounded"
     }
   ],
-  "edges": [],
-  "nid": 2,
+  "edges": [
+    {
+      "id": "e3",
+      "from": "n1",
+      "to": "n2"
+    }
+  ],
+  "nid": 4,
   "edgeThickness": 2,
   "edgeColor": "#b8b0a6"
 }
