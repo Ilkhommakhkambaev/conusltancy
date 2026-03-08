@@ -1,0 +1,47 @@
+{
+  "title": "432904",
+  "nodes": [
+    {
+      "id": "n1",
+      "x": 798.8817204301075,
+      "y": 373.28833134209475,
+      "w": 0,
+      "h": 0,
+      "text": "New Node",
+      "ci": 0,
+      "link": "",
+      "collapsed": false,
+      "isNote": false,
+      "fontSize": 13,
+      "fontFamily": "Nunito",
+      "textColor": "",
+      "bold": false,
+      "italic": false,
+      "textAlign": "left",
+      "shape": "rounded"
+    },
+    {
+      "id": "n2",
+      "x": 929.3078454798884,
+      "y": 273.726403823178,
+      "w": 0,
+      "h": 0,
+      "text": "New Node",
+      "ci": 0,
+      "link": "",
+      "collapsed": false,
+      "isNote": false,
+      "fontSize": 13,
+      "fontFamily": "Nunito",
+      "textColor": "",
+      "bold": false,
+      "italic": false,
+      "textAlign": "left",
+      "shape": "rounded"
+    }
+  ],
+  "edges": [],
+  "nid": 3,
+  "edgeThickness": 2,
+  "edgeColor": "#b8b0a6"
+}
