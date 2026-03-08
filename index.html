@@ -1403,30 +1403,6 @@ window.addEventListener('keydown', e => {
     return;
   }
 
-  // Ctrl+V = paste clipboard as Drive link into selected node
-  if (e.key === 'v' && (e.ctrlKey || e.metaKey) && !e.target.matches('input, textarea')) {
-    if (S.sel) {
-      e.preventDefault();
-      navigator.clipboard.readText().then(text => {
-        const url = text.trim();
-        if (url.startsWith('http')) {
-          const n = S.nodes.find(n => n.id === S.sel);
-          if (n) {
-            pushUndo();
-            n.link = url;
-            buildNode(n.id);
-            select(n.id);
-            autoSave();
-            showToast('Link added to node');
-          }
-        } else {
-          showToast('Clipboard does not contain a URL');
-        }
-      }).catch(() => showToast('Could not read clipboard'));
-    }
-    return;
-  }
-
   // Ctrl+A = select all nodes
   if (e.key === 'a' && (e.ctrlKey || e.metaKey) && !e.target.matches('input, textarea')) {
     e.preventDefault();
@@ -2405,6 +2381,29 @@ async function ghSaveFileAndWait(filename) {
   S.currentFile = filename;
   showToast('Saved: ' + filename);
 }
+
+// ── Ctrl+V paste URL directly into selected node (no permission popup) ──
+// The 'paste' event fires natively on Ctrl+V and gives clipboard text
+// without requiring browser clipboard permission API.
+window.addEventListener('paste', e => {
+  // Only intercept if user is not typing inside an input/textarea
+  if (e.target.matches('input, textarea')) return;
+  // Only act if a node is selected
+  if (!S.sel) return;
+
+  const text = (e.clipboardData || window.clipboardData).getData('text').trim();
+  if (!text.startsWith('http')) return; // not a URL - ignore, let default paste happen
+
+  e.preventDefault(); // block default paste behavior
+  const n = S.nodes.find(n => n.id === S.sel);
+  if (!n) return;
+  pushUndo();
+  n.link = text;
+  buildNode(n.id);
+  select(n.id);
+  autoSave();
+  showToast('Link added to node');
+});
 
 // ── START ──
 init();
