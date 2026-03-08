@@ -3,8 +3,8 @@
   "nodes": [
     {
       "id": "n1",
-      "x": 650,
-      "y": 265.5,
+      "x": 547,
+      "y": 263.5,
       "w": 0,
       "h": 0,
       "text": "072_Community_Resilience",
@@ -21,12 +21,145 @@
       "shape": "rounded"
     },
     {
-      "id": "n3",
-      "x": 877,
-      "y": 339.5,
+      "id": "n6",
+      "x": 796,
+      "y": 268,
       "w": 0,
       "h": 0,
-      "text": "1st_stage",
+      "text": "01_Request_for_information",
+      "ci": 0,
+      "link": "https://drive.google.com/drive/folders/1muGQ1kEZDNXu1lzwEnHG8xC_ePelgHSw?usp=drive_link",
+      "collapsed": false,
+      "isNote": false,
+      "fontSize": 13,
+      "fontFamily": "Nunito",
+      "textColor": "",
+      "bold": false,
+      "italic": false,
+      "textAlign": "left",
+      "shape": "rounded"
+    },
+    {
+      "id": "n10",
+      "x": 718,
+      "y": 376,
+      "w": 0,
+      "h": 0,
+      "text": "Tenders_appliers",
+      "ci": 0,
+      "link": "",
+      "collapsed": false,
+      "isNote": false,
+      "fontSize": 13,
+      "fontFamily": "Nunito",
+      "textColor": "",
+      "bold": false,
+      "italic": false,
+      "textAlign": "left",
+      "shape": "rounded"
+    },
+    {
+      "id": "n12",
+      "x": 442.83870967741944,
+      "y": 465.7096774193548,
+      "w": 0,
+      "h": 0,
+      "text": "03_PO_Rushdi_Inson",
+      "ci": 0,
+      "link": "https://drive.google.com/drive/folders/1ed83Va9LLk3TE5U_7H5TUm6-_P9CevAT?usp=drive_link",
+      "collapsed": false,
+      "isNote": false,
+      "fontSize": 13,
+      "fontFamily": "Nunito",
+      "textColor": "",
+      "bold": false,
+      "italic": false,
+      "textAlign": "left",
+      "shape": "rounded"
+    },
+    {
+      "id": "n13",
+      "x": 510.4731182795698,
+      "y": 563.4516129032257,
+      "w": 0,
+      "h": 0,
+      "text": "04_PO_Bonuvoni_Khatlon",
+      "ci": 0,
+      "link": "",
+      "collapsed": false,
+      "isNote": false,
+      "fontSize": 13,
+      "fontFamily": "Nunito",
+      "textColor": "",
+      "bold": false,
+      "italic": false,
+      "textAlign": "left",
+      "shape": "rounded"
+    },
+    {
+      "id": "n14",
+      "x": 689.9354838709678,
+      "y": 584.8494623655913,
+      "w": 0,
+      "h": 0,
+      "text": "05_PO_Shifo",
+      "ci": 0,
+      "link": "",
+      "collapsed": false,
+      "isNote": false,
+      "fontSize": 13,
+      "fontFamily": "Nunito",
+      "textColor": "",
+      "bold": false,
+      "italic": false,
+      "textAlign": "left",
+      "shape": "rounded"
+    },
+    {
+      "id": "n15",
+      "x": 823.1612903225806,
+      "y": 577.2150537634408,
+      "w": 0,
+      "h": 0,
+      "text": "06_Zarzamin",
+      "ci": 0,
+      "link": "",
+      "collapsed": false,
+      "isNote": false,
+      "fontSize": 13,
+      "fontFamily": "Nunito",
+      "textColor": "",
+      "bold": false,
+      "italic": false,
+      "textAlign": "left",
+      "shape": "rounded"
+    },
+    {
+      "id": "n16",
+      "x": 964.9892473118279,
+      "y": 577.1075268817203,
+      "w": 0,
+      "h": 0,
+      "text": "07_Favz",
+      "ci": 0,
+      "link": "",
+      "collapsed": false,
+      "isNote": false,
+      "fontSize": 13,
+      "fontFamily": "Nunito",
+      "textColor": "",
+      "bold": false,
+      "italic": false,
+      "textAlign": "left",
+      "shape": "rounded"
+    },
+    {
+      "id": "n17",
+      "x": 984.2365591397848,
+      "y": 474.8494623655915,
+      "w": 0,
+      "h": 0,
+      "text": "08_Sharikon baroi rushd",
       "ci": 0,
       "link": "",
       "collapsed": false,
@@ -42,12 +175,47 @@
   ],
   "edges": [
     {
-      "id": "e4",
+      "id": "e7",
       "from": "n1",
-      "to": "n3"
+      "to": "n6"
+    },
+    {
+      "id": "e22",
+      "from": "n6",
+      "to": "n10"
+    },
+    {
+      "id": "e23",
+      "from": "n10",
+      "to": "n12"
+    },
+    {
+      "id": "e24",
+      "from": "n10",
+      "to": "n13"
+    },
+    {
+      "id": "e25",
+      "from": "n10",
+      "to": "n14"
+    },
+    {
+      "id": "e26",
+      "from": "n10",
+      "to": "n15"
+    },
+    {
+      "id": "e27",
+      "from": "n10",
+      "to": "n16"
+    },
+    {
+      "id": "e28",
+      "from": "n10",
+      "to": "n17"
     }
   ],
-  "nid": 5,
+  "nid": 29,
   "edgeThickness": 2,
   "edgeColor": "#b8b0a6"
 }
