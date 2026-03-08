@@ -2522,19 +2522,6 @@ window.addEventListener('paste', e => {
   showToast('Link added to node');
 });
 
-// ── Auto-save to GitHub every 5 minutes ──
-// Only runs if a file is already loaded/named (S.currentFile is set).
-// Silently saves in background - shows a small toast so you know it happened.
-setInterval(() => {
-  if (S.currentFile && S.nodes.length > 0 && ghReady()) {
-    ghSaveFile(S.currentFile).then(() => {
-      showToast('Auto-saved: ' + S.currentFile);
-    }).catch(() => {
-      // Fail silently - don't interrupt work with error popups
-    });
-  }
-}, 5 * 60 * 1000); // 5 minutes in milliseconds
-
 // ── START ──
 init();
 </script>
