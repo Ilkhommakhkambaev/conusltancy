@@ -3,11 +3,11 @@
   "nodes": [
     {
       "id": "n4",
-      "x": 591,
-      "y": 249.9247311827957,
-      "w": 228,
-      "h": 51,
-      "text": "074_IOM",
+      "x": 593,
+      "y": 250.9247311827957,
+      "w": 250,
+      "h": 54,
+      "text": "074_IOM_MARKETING STRATEGY CONSULTANT",
       "ci": 2,
       "link": "https://drive.google.com/drive/folders/1r34q3Wh4DS5s_SdJDbC4JgNFJJKNkL7Q?usp=drive_link",
       "collapsed": false,
@@ -79,8 +79,8 @@
     },
     {
       "id": "n11",
-      "x": 745,
-      "y": 387,
+      "x": 747,
+      "y": 438,
       "w": 0,
       "h": 0,
       "text": "_RFQ_ATS_update",
@@ -98,8 +98,8 @@
     },
     {
       "id": "n12",
-      "x": 813,
-      "y": 438,
+      "x": 938,
+      "y": 410,
       "w": 0,
       "h": 0,
       "text": "00_TOR",
@@ -117,8 +117,8 @@
     },
     {
       "id": "n13",
-      "x": 821,
-      "y": 488,
+      "x": 980,
+      "y": 499,
       "w": 0,
       "h": 0,
       "text": "01_Agreement_Contract",
@@ -136,8 +136,8 @@
     },
     {
       "id": "n14",
-      "x": 987,
-      "y": 477,
+      "x": 1010,
+      "y": 529,
       "w": 0,
       "h": 0,
       "text": "02_Project_Documents",
@@ -155,8 +155,8 @@
     },
     {
       "id": "n15",
-      "x": 1125,
-      "y": 412,
+      "x": 1040,
+      "y": 559,
       "w": 0,
       "h": 0,
       "text": "03_Materials",
@@ -188,34 +188,9 @@
       "id": "e10",
       "from": "n4",
       "to": "n7"
-    },
-    {
-      "id": "e16",
-      "from": "n7",
-      "to": "n11"
-    },
-    {
-      "id": "e17",
-      "from": "n7",
-      "to": "n12"
-    },
-    {
-      "id": "e18",
-      "from": "n7",
-      "to": "n13"
-    },
-    {
-      "id": "e19",
-      "from": "n7",
-      "to": "n14"
-    },
-    {
-      "id": "e20",
-      "from": "n7",
-      "to": "n15"
     }
   ],
-  "nid": 21,
+  "nid": 16,
   "edgeThickness": 2,
   "edgeColor": "#b8b0a6"
 }
