@@ -1395,6 +1395,38 @@ window.addEventListener('keydown', e => {
     spaceHeld = true;
     document.getElementById('wrap').style.cursor = 'grab';
   }
+
+  // Ctrl+Z = undo
+  if (e.key === 'z' && (e.ctrlKey || e.metaKey) && !e.target.matches('input, textarea')) {
+    e.preventDefault();
+    undoLast();
+    return;
+  }
+
+  // Ctrl+V = paste clipboard as Drive link into selected node
+  if (e.key === 'v' && (e.ctrlKey || e.metaKey) && !e.target.matches('input, textarea')) {
+    if (S.sel) {
+      e.preventDefault();
+      navigator.clipboard.readText().then(text => {
+        const url = text.trim();
+        if (url.startsWith('http')) {
+          const n = S.nodes.find(n => n.id === S.sel);
+          if (n) {
+            pushUndo();
+            n.link = url;
+            buildNode(n.id);
+            select(n.id);
+            autoSave();
+            showToast('Link added to node');
+          }
+        } else {
+          showToast('Clipboard does not contain a URL');
+        }
+      }).catch(() => showToast('Could not read clipboard'));
+    }
+    return;
+  }
+
   // Ctrl+A = select all nodes
   if (e.key === 'a' && (e.ctrlKey || e.metaKey) && !e.target.matches('input, textarea')) {
     e.preventDefault();
@@ -1411,10 +1443,23 @@ window.addEventListener('keydown', e => {
     showToast(`${S.selSet.size} nodes selected`);
     return;
   }
-  // Delete key removes selected node(s)
+
+  // Delete / Backspace = remove selected node(s) OR selected edge
   if ((e.key === 'Delete' || e.key === 'Backspace') && !e.target.matches('input, textarea')) {
+    // Delete selected edge if one is selected
+    if (S.selEdge) {
+      pushUndo();
+      const edge = S.edges.find(ed => ed.id === S.selEdge);
+      S.edges = S.edges.filter(ed => ed.id !== S.selEdge);
+      S.selEdge = null;
+      document.getElementById('fmt-panel').classList.remove('edge-mode', 'visible');
+      if (edge) buildNode(edge.from);
+      drawEdges();
+      autoSave();
+      return;
+    }
+    // Delete selected node(s)
     if (S.selSet.size > 1) {
-      // Delete all multi-selected nodes
       const ids = [...S.selSet];
       clearMultiSel();
       ids.forEach(id => deleteNode(id));
@@ -1558,6 +1603,7 @@ function drawEdges() {
           document.getElementById('edge-label-lbl').style.display = 'none';
           document.getElementById('fmt-edge-text').style.display  = 'none';
         }
+        pushUndo(); // save state before edge deletion
         S.edges = S.edges.filter(ed => ed.id !== edge.id);
         buildNode(edge.from);
         drawEdges();
@@ -1692,7 +1738,31 @@ function addNoteNode(parentId) {
 //  DELETE NODE (and all its edges)
 // ────────────────────────────────────────────────────────
 
+// ────────────────────────────────────────────────────────
+//  UNDO SYSTEM (Ctrl+Z)
+//  Stores snapshots of full map state before destructive actions.
+//  Max 30 snapshots to keep memory reasonable.
+// ────────────────────────────────────────────────────────
+
+const undoStack = [];
+const UNDO_MAX  = 30;
+
+function pushUndo() {
+  // Deep-clone current state before any destructive action
+  undoStack.push(JSON.stringify(getMapData()));
+  if (undoStack.length > UNDO_MAX) undoStack.shift(); // drop oldest
+}
+
+function undoLast() {
+  if (undoStack.length === 0) { showToast('Nothing to undo'); return; }
+  const snapshot = JSON.parse(undoStack.pop());
+  clearSilent();
+  restore(snapshot);
+  showToast('Undo');
+}
+
 function deleteNode(id) {
+  pushUndo(); // save state before deletion
   const parentIds = S.edges.filter(e => e.to === id).map(e => e.from);
 
   S.nodes = S.nodes.filter(n => n.id !== id);
