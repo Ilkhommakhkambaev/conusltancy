@@ -20,7 +20,7 @@
       "textAlign": "left",
       "shape": "rounded",
       "borderColor": "",
-      "borderWidth": 2
+      "borderWidth": 2.5
     },
     {
       "id": "n2",
@@ -41,7 +41,7 @@
       "textAlign": "left",
       "shape": "rounded",
       "borderColor": "",
-      "borderWidth": 0
+      "borderWidth": 2.5
     },
     {
       "id": "n3",
@@ -62,7 +62,7 @@
       "textAlign": "left",
       "shape": "rounded",
       "borderColor": "",
-      "borderWidth": 0
+      "borderWidth": 2.5
     }
   ],
   "edges": [],
