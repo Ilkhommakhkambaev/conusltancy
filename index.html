@@ -548,6 +548,15 @@ body {
   <button class="shape-btn node-only" id="shape-diamond" onclick="applyShape('diamond')" title="Diamond">
     <svg viewBox="0 0 18 18"><polygon points="9,1 17,9 9,17 1,9" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
   </button>
+
+  <div class="fmt-sep node-only"></div>
+  <label class="node-only">Border</label>
+  <input id="fmt-border-color" class="node-only" type="color" value="#c8c0b8"
+         oninput="applyBorderColor(this.value)" title="Node border color"
+         style="width:26px;height:26px;border:1.5px solid var(--border);border-radius:5px;cursor:pointer;padding:0;"/>
+  <input id="fmt-border-width" class="node-only" type="range" min="1" max="6" step="0.5" value="2"
+         oninput="applyBorderWidth(this.value)" title="Node border thickness" style="width:60px;cursor:pointer;accent-color:var(--accent);"/>
+  <span id="fmt-border-val" class="node-only" style="font-size:10px;color:var(--muted);min-width:22px;">2px</span>
 </div>
 
 <!-- ── CREDIT ──────────────────────────────────────────────── -->
@@ -778,6 +787,8 @@ function addNode(x, y, text, ci, link, isNote) {
     bold: false, italic: false, textAlign: 'left',
     // Shape
     shape: 'rounded', // rounded | square | circle | diamond | hexagon | parallelogram
+    // Border
+    borderColor: '', borderWidth: 0,
   });
   buildNode(id);
   updateHint();
@@ -818,7 +829,9 @@ function buildNode(id) {
   // When user has manually resized, fix width and drop max-width so text wraps freely
   const wStyle = n.w ? `width:${n.w}px; max-width:${n.w}px; white-space:normal;` : '';
   const hStyle = n.h ? `min-height:${n.h}px;` : '';
-  el.style.cssText = `left:${n.x}px; top:${n.y}px; background:${c.bg}; border-color:${c.bd}; color:${isDark ? '#fff' : 'var(--text)'}; ${wStyle}${hStyle}`;
+  const brdColor = n.borderColor || c.bd;
+  const brdWidth = n.borderWidth ? `border-width:${n.borderWidth}px;` : '';
+  el.style.cssText = `left:${n.x}px; top:${n.y}px; background:${c.bg}; border-color:${brdColor}; ${brdWidth} color:${isDark ? '#fff' : 'var(--text)'}; ${wStyle}${hStyle}`;
 
   // ── Text label ──
   const lbl = document.createElement('div');
@@ -1090,6 +1103,12 @@ function populateFmtPanel(id) {
     const btn = document.getElementById('shape-' + s);
     if (btn) btn.classList.toggle('on', (n.shape || 'rounded') === s);
   });
+  // Sync border controls
+  const c = COLORS[n.ci || 0];
+  document.getElementById('fmt-border-color').value = n.borderColor || c.bd;
+  const bw = n.borderWidth || 2;
+  document.getElementById('fmt-border-width').value = bw;
+  document.getElementById('fmt-border-val').textContent = bw + 'px';
 }
 
 function clearMultiSel() {
@@ -1170,6 +1189,38 @@ function applyAlign(align) {
     n.textAlign = align;
     const lbl = document.querySelector(`#${id} .node-label`);
     if (lbl) lbl.style.textAlign = align;
+  });
+  autoSave();
+}
+
+function applyBorderColor(val) {
+  const targetIds = S.selSet.size > 1
+    ? [...S.selSet]
+    : (S.sel ? [S.sel] : []);
+  if (targetIds.length === 0) return;
+  targetIds.forEach(id => {
+    const n = S.nodes.find(n => n.id === id);
+    const el = document.getElementById(id);
+    if (!n || !el) return;
+    n.borderColor = val;
+    el.style.borderColor = val;
+  });
+  autoSave();
+}
+
+function applyBorderWidth(val) {
+  const v = parseFloat(val);
+  document.getElementById('fmt-border-val').textContent = v + 'px';
+  const targetIds = S.selSet.size > 1
+    ? [...S.selSet]
+    : (S.sel ? [S.sel] : []);
+  if (targetIds.length === 0) return;
+  targetIds.forEach(id => {
+    const n = S.nodes.find(n => n.id === id);
+    const el = document.getElementById(id);
+    if (!n || !el) return;
+    n.borderWidth = v;
+    el.style.borderWidth = v + 'px';
   });
   autoSave();
 }
@@ -2085,6 +2136,7 @@ function restore(data) {
     textColor: n.textColor || '', bold: n.bold || false, italic: n.italic || false,
     textAlign: n.textAlign || 'left',
     shape: n.shape || 'rounded',
+    borderColor: n.borderColor || '', borderWidth: n.borderWidth || 0,
   }));
   S.edges = data.edges || [];
   S.nid   = data.nid   || 1;
