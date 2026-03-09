@@ -345,16 +345,17 @@ body {
 /* ── RUBBER BAND SELECTION ───────────── */
 #sel-rect {
   position: absolute;
-  border: 2px solid var(--accent);
-  background: rgba(59,110,165,0.07);
+  border: 2px dashed #3a3a3a;
+  background: rgba(50,50,50,0.06);
   border-radius: 3px;
   pointer-events: none;
   z-index: 500;
   display: none;
 }
 .node.multi-selected {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(59,110,165,0.22), var(--shadow);
+  border-color: #3a3a3a;
+  box-shadow: 0 0 0 3px rgba(50,50,50,0.25), var(--shadow);
+  background-image: linear-gradient(rgba(0,0,0,0.04), rgba(0,0,0,0.04));
 }
 
 #ctx {
@@ -468,7 +469,6 @@ body {
   <input id="map-title" type="text" value="My Mind Map" title="Click to rename map"/>
   <div class="sep"></div>
   <button class="btn primary" onclick="addNode()">+ Add Node</button>
-  <button class="btn orange" id="btn-conn" onclick="cxConnToggle()">&#8594; Connect</button>
   <button class="btn" onclick="newMapStart()" title="Create a new map">&#43; New Map</button>
   <div class="sep"></div>
   <span style="font-size:11px;color:var(--muted);">Color:</span>
@@ -919,6 +919,16 @@ function buildNode(id) {
         S.selSet.add(id);
         el.classList.add('multi-selected');
       }
+      // Show format panel for batch editing if multiple nodes selected
+      if (S.selSet.size > 1) {
+        showMultiSelectPanel();
+      } else if (S.selSet.size === 1) {
+        const onlyId = [...S.selSet][0];
+        clearMultiSel();
+        select(onlyId);
+      } else {
+        document.getElementById('fmt-panel').classList.remove('visible');
+      }
       return; // don't start drag on ctrl+click
     }
 
@@ -1079,8 +1089,19 @@ function clearMultiSel() {
   S.selSet.clear();
 }
 
+// Show format panel populated from the first node in multi-selection
+function showMultiSelectPanel() {
+  if (S.selSet.size < 2) return;
+  const firstId = [...S.selSet][0];
+  const panel = document.getElementById('fmt-panel');
+  panel.classList.remove('edge-mode');
+  populateFmtPanel(firstId);
+  panel.classList.add('visible');
+  showToast(`${S.selSet.size} nodes selected`);
+}
+
 // ────────────────────────────────────────────────────────
-//  FORMAT PANEL - text formatting for selected node
+//  FORMAT PANEL - text formatting for selected node(s)
 // ────────────────────────────────────────────────────────
 
 function applyFmt() {
@@ -1126,18 +1147,22 @@ function toggleFmtBtn(btnId) {
 }
 
 function applyAlign(align) {
-  const id = S.sel;
-  if (!id) return;
-  const n = S.nodes.find(n => n.id === id);
-  if (!n) return;
-  n.textAlign = align;
+  // Collect targets: multi-selected or single selected
+  const targetIds = S.selSet.size > 1
+    ? [...S.selSet]
+    : (S.sel ? [S.sel] : []);
+  if (targetIds.length === 0) return;
   // Update button states
   ['left','center','right'].forEach(a => {
     document.getElementById('fmt-align-' + a).classList.toggle('on', a === align);
   });
-  // Apply live to label without full rebuild
-  const lbl = document.querySelector(`#${id} .node-label`);
-  if (lbl) lbl.style.textAlign = align;
+  targetIds.forEach(id => {
+    const n = S.nodes.find(n => n.id === id);
+    if (!n) return;
+    n.textAlign = align;
+    const lbl = document.querySelector(`#${id} .node-label`);
+    if (lbl) lbl.style.textAlign = align;
+  });
   autoSave();
 }
 
@@ -1221,27 +1246,43 @@ function selectEdge(edgeId) {
 // ────────────────────────────────────────────────────────
 
 function applyShape(shape) {
-  const id = S.sel;
-  if (!id) return;
-  const n = S.nodes.find(n => n.id === id);
-  if (!n) return;
-  n.shape = shape;
+  // Collect targets: multi-selected or single selected
+  const targetIds = S.selSet.size > 1
+    ? [...S.selSet]
+    : (S.sel ? [S.sel] : []);
+  if (targetIds.length === 0) return;
 
-  // Circle needs equal width and height to look round.
-  // Measure the current node size and set w = h = max(w,h)
-  if (shape === 'circle') {
-    const el = document.getElementById(id);
-    if (el) {
-      const size = Math.max(el.offsetWidth, el.offsetHeight, 80);
-      n.w = size; n.h = size;
+  // Update shape button states
+  const shapes = ['rounded','square','circle','diamond','hexagon','parallelogram'];
+  shapes.forEach(s => {
+    const btn = document.getElementById('shape-' + s);
+    if (btn) btn.classList.toggle('on', s === shape);
+  });
+
+  targetIds.forEach(id => {
+    const n = S.nodes.find(n => n.id === id);
+    if (!n) return;
+    n.shape = shape;
+
+    if (shape === 'circle') {
+      const el = document.getElementById(id);
+      if (el) {
+        const size = Math.max(el.offsetWidth, el.offsetHeight, 80);
+        n.w = size; n.h = size;
+      }
+    } else if (shape === 'rounded' || shape === 'square' || shape === 'parallelogram') {
+      n.w = 0; n.h = 0;
     }
-  } else if (shape === 'rounded' || shape === 'square' || shape === 'parallelogram') {
-    // Reset manual size so node shrinks back to content
-    n.w = 0; n.h = 0;
-  }
 
-  buildNode(id);
-  select(id);
+    buildNode(id);
+  });
+
+  // Re-apply multi-selected class after rebuild
+  if (S.selSet.size > 1) {
+    S.selSet.forEach(sid => document.getElementById(sid)?.classList.add('multi-selected'));
+  } else if (targetIds.length === 1) {
+    select(targetIds[0]);
+  }
   drawEdges();
   autoSave();
 }
@@ -1362,7 +1403,7 @@ window.addEventListener('mousemove', e => {
     return;
   }
 
-  // ── Rubber band selection ──
+  // ── Rubber band selection (Ctrl+drag) ──
   if (S.rubber) {
     const r   = cvs.getBoundingClientRect();
     // Current mouse in canvas coords
@@ -1373,15 +1414,19 @@ window.addEventListener('mousemove', e => {
     const w   = Math.abs(mx - S.rubber.sx);
     const h   = Math.abs(my - S.rubber.sy);
     selRectEl.style.cssText = `display:block; left:${x}px; top:${y}px; width:${w}px; height:${h}px;`;
-    // Highlight nodes that fall inside the rectangle
-    clearMultiSel();
+    // Remove classes from nodes no longer inside rect (but keep pre-existing selections)
     S.nodes.forEach(n => {
       const el = document.getElementById(n.id);
       if (!el || el.style.display === 'none') return;
       const nx = n.x, ny = n.y, nw = el.offsetWidth, nh = el.offsetHeight;
-      if (nx < x + w && nx + nw > x && ny < y + h && ny + nh > y) {
+      const inside = (nx < x + w && nx + nw > x && ny < y + h && ny + nh > y);
+      if (inside) {
         S.selSet.add(n.id);
         el.classList.add('multi-selected');
+      } else if (!S.rubber.preSelected || !S.rubber.preSelected.has(n.id)) {
+        // Only remove if it wasn't already selected before this rubber band
+        S.selSet.delete(n.id);
+        el.classList.remove('multi-selected');
       }
     });
     return;
@@ -1409,8 +1454,11 @@ window.addEventListener('mouseup', e => {
       const id = [...S.selSet][0];
       clearMultiSel();
       select(id);
+    } else if (S.selSet.size > 1) {
+      // Multiple nodes selected - show format panel for batch editing
+      showMultiSelectPanel();
     }
-    // If 0 nodes caught - nothing to do, already cleared
+    // If 0 nodes caught - nothing to do
   }
   if (S.pan.on) {
     S.pan.on = false;
@@ -1451,7 +1499,7 @@ window.addEventListener('keydown', e => {
         el.classList.add('multi-selected');
       }
     });
-    showToast(`${S.selSet.size} nodes selected`);
+    if (S.selSet.size > 1) showMultiSelectPanel();
     return;
   }
 
@@ -1490,15 +1538,19 @@ window.addEventListener('keyup', e => {
 
 document.getElementById('wrap').addEventListener('mousedown', e => {
   if (e.button === 0 && (e.target === cvs || e.target === svgEl || e.target.closest('#empty-hint') || e.target.id === 'sel-rect')) {
-    select(null);
     hideCtxMenu();
 
-    if (!spaceHeld) {
-      // Start rubber band selection
+    if (!spaceHeld && (e.ctrlKey || e.metaKey)) {
+      // Ctrl+drag: start rubber band selection (keep existing multi-sel)
+      select(null); // clear single selection
       const r  = cvs.getBoundingClientRect();
       const sx = (e.clientX - r.left) / S.zoom;
       const sy = (e.clientY - r.top)  / S.zoom;
-      S.rubber = { sx, sy };
+      S.rubber = { sx, sy, preSelected: new Set(S.selSet) };
+    } else if (!spaceHeld) {
+      // Normal click on empty canvas: deselect all
+      select(null);
+      clearMultiSel();
     }
   }
   if (e.button === 1 || (e.button === 0 && spaceHeld)) {
@@ -1891,12 +1943,25 @@ function deleteNode(id) {
 // ────────────────────────────────────────────────────────
 
 function recolor(ci) {
-  if (!S.sel) { showToast('Select a node first, then pick a color'); return; }
-  const n = S.nodes.find(n => n.id === S.sel);
-  if (!n) return;
-  n.ci = ci;
-  buildNode(n.id);
-  select(n.id);
+  // Collect targets: multi-selected or single selected
+  const targetIds = S.selSet.size > 1
+    ? [...S.selSet]
+    : (S.sel ? [S.sel] : []);
+  if (targetIds.length === 0) { showToast('Select a node first, then pick a color'); return; }
+
+  targetIds.forEach(id => {
+    const n = S.nodes.find(n => n.id === id);
+    if (!n) return;
+    n.ci = ci;
+    buildNode(n.id);
+  });
+
+  // Re-apply selection classes after rebuild
+  if (S.selSet.size > 1) {
+    S.selSet.forEach(sid => document.getElementById(sid)?.classList.add('multi-selected'));
+  } else if (targetIds.length === 1) {
+    select(targetIds[0]);
+  }
   drawEdges();
   autoSave();
 }
