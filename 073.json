@@ -3,11 +3,11 @@
   "nodes": [
     {
       "id": "n1",
-      "x": 895,
-      "y": 248.5,
-      "w": 0,
-      "h": 0,
-      "text": "New Node",
+      "x": 737,
+      "y": 226.5,
+      "w": 234,
+      "h": 40,
+      "text": "073_CIP_Invest_Committee",
       "ci": 0,
       "link": "",
       "collapsed": false,
