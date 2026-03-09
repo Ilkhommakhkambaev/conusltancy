@@ -18,7 +18,9 @@
       "bold": false,
       "italic": false,
       "textAlign": "left",
-      "shape": "circle"
+      "shape": "circle",
+      "borderColor": "",
+      "borderWidth": 0
     },
     {
       "id": "n5",
@@ -37,7 +39,9 @@
       "bold": false,
       "italic": false,
       "textAlign": "left",
-      "shape": "rounded"
+      "shape": "rounded",
+      "borderColor": "",
+      "borderWidth": 0
     },
     {
       "id": "n6",
@@ -56,7 +60,9 @@
       "bold": false,
       "italic": false,
       "textAlign": "left",
-      "shape": "rounded"
+      "shape": "rounded",
+      "borderColor": "",
+      "borderWidth": 0
     },
     {
       "id": "n7",
@@ -75,7 +81,9 @@
       "bold": false,
       "italic": false,
       "textAlign": "left",
-      "shape": "rounded"
+      "shape": "rounded",
+      "borderColor": "",
+      "borderWidth": 0
     },
     {
       "id": "n11",
@@ -94,7 +102,9 @@
       "bold": false,
       "italic": false,
       "textAlign": "left",
-      "shape": "rounded"
+      "shape": "rounded",
+      "borderColor": "",
+      "borderWidth": 0
     },
     {
       "id": "n12",
@@ -113,7 +123,9 @@
       "bold": false,
       "italic": false,
       "textAlign": "left",
-      "shape": "rounded"
+      "shape": "rounded",
+      "borderColor": "",
+      "borderWidth": 0
     },
     {
       "id": "n13",
@@ -132,7 +144,9 @@
       "bold": false,
       "italic": false,
       "textAlign": "left",
-      "shape": "rounded"
+      "shape": "rounded",
+      "borderColor": "",
+      "borderWidth": 0
     },
     {
       "id": "n17",
@@ -151,7 +165,9 @@
       "bold": false,
       "italic": false,
       "textAlign": "left",
-      "shape": "rounded"
+      "shape": "rounded",
+      "borderColor": "",
+      "borderWidth": 0
     },
     {
       "id": "n18",
@@ -170,7 +186,9 @@
       "bold": false,
       "italic": false,
       "textAlign": "left",
-      "shape": "rounded"
+      "shape": "rounded",
+      "borderColor": "",
+      "borderWidth": 0
     },
     {
       "id": "n19",
@@ -189,7 +207,9 @@
       "bold": false,
       "italic": false,
       "textAlign": "left",
-      "shape": "rounded"
+      "shape": "rounded",
+      "borderColor": "",
+      "borderWidth": 0
     },
     {
       "id": "n20",
@@ -208,7 +228,9 @@
       "bold": false,
       "italic": false,
       "textAlign": "left",
-      "shape": "rounded"
+      "shape": "rounded",
+      "borderColor": "",
+      "borderWidth": 0
     },
     {
       "id": "n21",
@@ -227,7 +249,9 @@
       "bold": false,
       "italic": false,
       "textAlign": "left",
-      "shape": "rounded"
+      "shape": "rounded",
+      "borderColor": "",
+      "borderWidth": 0
     },
     {
       "id": "n29",
@@ -246,7 +270,9 @@
       "bold": false,
       "italic": false,
       "textAlign": "left",
-      "shape": "rounded"
+      "shape": "rounded",
+      "borderColor": "",
+      "borderWidth": 0
     },
     {
       "id": "n30",
@@ -265,7 +291,9 @@
       "bold": false,
       "italic": false,
       "textAlign": "left",
-      "shape": "rounded"
+      "shape": "rounded",
+      "borderColor": "",
+      "borderWidth": 0
     },
     {
       "id": "n34",
@@ -284,7 +312,9 @@
       "bold": false,
       "italic": false,
       "textAlign": "left",
-      "shape": "rounded"
+      "shape": "rounded",
+      "borderColor": "",
+      "borderWidth": 0
     },
     {
       "id": "n35",
@@ -303,7 +333,9 @@
       "bold": false,
       "italic": false,
       "textAlign": "left",
-      "shape": "rounded"
+      "shape": "rounded",
+      "borderColor": "",
+      "borderWidth": 0
     },
     {
       "id": "n36",
@@ -322,7 +354,9 @@
       "bold": false,
       "italic": false,
       "textAlign": "left",
-      "shape": "rounded"
+      "shape": "rounded",
+      "borderColor": "",
+      "borderWidth": 0
     },
     {
       "id": "n43",
@@ -341,7 +375,9 @@
       "bold": false,
       "italic": false,
       "textAlign": "left",
-      "shape": "rounded"
+      "shape": "rounded",
+      "borderColor": "",
+      "borderWidth": 0
     },
     {
       "id": "n44",
@@ -360,7 +396,9 @@
       "bold": false,
       "italic": false,
       "textAlign": "left",
-      "shape": "rounded"
+      "shape": "rounded",
+      "borderColor": "",
+      "borderWidth": 0
     },
     {
       "id": "n45",
@@ -379,7 +417,9 @@
       "bold": false,
       "italic": false,
       "textAlign": "left",
-      "shape": "rounded"
+      "shape": "rounded",
+      "borderColor": "",
+      "borderWidth": 0
     },
     {
       "id": "n46",
@@ -398,7 +438,9 @@
       "bold": false,
       "italic": false,
       "textAlign": "left",
-      "shape": "rounded"
+      "shape": "rounded",
+      "borderColor": "",
+      "borderWidth": 0
     },
     {
       "id": "n47",
@@ -417,7 +459,9 @@
       "bold": false,
       "italic": false,
       "textAlign": "left",
-      "shape": "rounded"
+      "shape": "rounded",
+      "borderColor": "",
+      "borderWidth": 0
     }
   ],
   "edges": [
