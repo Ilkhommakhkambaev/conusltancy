@@ -1,5 +1,5 @@
 {
-  "title": "075_Ilmhona_UNICEF",
+  "title": "075 Ilmhona UNICEF",
   "nodes": [
     {
       "id": "n1",
@@ -181,25 +181,6 @@
       "text": "03_Materials",
       "ci": 0,
       "link": "https://drive.google.com/drive/folders/1R9qtMPWKUQCnXT5pKgI4BmhhyYqbkyOy?usp=drive_link",
-      "collapsed": false,
-      "isNote": false,
-      "fontSize": 13,
-      "fontFamily": "Nunito",
-      "textColor": "",
-      "bold": false,
-      "italic": false,
-      "textAlign": "left",
-      "shape": "rounded"
-    },
-    {
-      "id": "n25",
-      "x": 1306.0262474824483,
-      "y": 565.4254332216034,
-      "w": 0,
-      "h": 0,
-      "text": "New Node",
-      "ci": 0,
-      "link": "",
       "collapsed": false,
       "isNote": false,
       "fontSize": 13,
