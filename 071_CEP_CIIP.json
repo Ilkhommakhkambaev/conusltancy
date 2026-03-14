@@ -525,27 +525,6 @@
       "shape": "rounded",
       "borderColor": "",
       "borderWidth": 0
-    },
-    {
-      "id": "n52",
-      "x": 787.5082985693923,
-      "y": 567.1365463156698,
-      "w": 0,
-      "h": 0,
-      "text": "New Node",
-      "ci": 0,
-      "link": "",
-      "collapsed": false,
-      "isNote": false,
-      "fontSize": 13,
-      "fontFamily": "Nunito",
-      "textColor": "",
-      "bold": false,
-      "italic": false,
-      "textAlign": "left",
-      "shape": "rounded",
-      "borderColor": "",
-      "borderWidth": 0
     }
   ],
   "edges": [
