@@ -531,6 +531,7 @@ body {
   <button class="btn" onclick="showHomeScreen()" title="My Maps" style="font-size:14px;">&#128193; My Maps</button>
   <div class="sep"></div>
   <button class="btn primary" onclick="addNode()">+ Add Node</button>
+  <button class="btn" onclick="autoLayout()" title="Auto-arrange nodes as a tree">&#9776; Auto Layout</button>
   <div class="sep"></div>
   <span style="font-size:11px;color:var(--muted);">Color:</span>
   <div class="color-strip" id="swatches"></div>
@@ -1063,6 +1064,132 @@ async function homeRenameGithub(oldFilename) {
     showToast('Error: ' + e.message);
     renderHomeList();
   }
+}
+
+// ────────────────────────────────────────────────────────
+//  AUTO TREE LAYOUT
+// ────────────────────────────────────────────────────────
+
+function autoLayout() {
+  if (S.nodes.length === 0) return;
+  pushUndo();
+
+  // Build adjacency: parent → children (using edge direction from → to)
+  const childrenOf = {};
+  const hasParent = new Set();
+  S.nodes.forEach(n => { childrenOf[n.id] = []; });
+  S.edges.forEach(e => {
+    if (childrenOf[e.from]) {
+      childrenOf[e.from].push(e.to);
+      hasParent.add(e.to);
+    }
+  });
+
+  // Find root nodes (no incoming edges)
+  const roots = S.nodes.filter(n => !hasParent.has(n.id));
+  // Disconnected nodes (no edges at all)
+  const connected = new Set();
+  S.edges.forEach(e => { connected.add(e.from); connected.add(e.to); });
+  const disconnected = S.nodes.filter(n => !connected.has(n.id));
+  // Actual tree roots (connected and no parent)
+  const treeRoots = roots.filter(n => connected.has(n.id));
+
+  // If no tree structure, nothing to layout
+  if (treeRoots.length === 0 && disconnected.length === S.nodes.length) {
+    showToast('No connections found. Connect nodes first, then auto-layout.');
+    return;
+  }
+
+  // If no clear root, use the first root or first node
+  if (treeRoots.length === 0) treeRoots.push(roots[0] || S.nodes[0]);
+
+  const H_GAP = 120;  // horizontal gap between levels
+  const V_GAP = 30;   // vertical gap between sibling nodes
+
+  // Measure actual node dimensions from DOM
+  function getNodeSize(id) {
+    const el = document.getElementById(id);
+    if (el) return { w: el.offsetWidth, h: el.offsetHeight };
+    return { w: 140, h: 50 }; // fallback
+  }
+
+  // Phase 1: compute subtree height for each node (bottom-up)
+  const subtreeH = {};
+  function calcSubtreeHeight(id, visited) {
+    if (visited.has(id)) return 0;
+    visited.add(id);
+    const children = (childrenOf[id] || []).filter(c => !visited.has(c));
+    const size = getNodeSize(id);
+    if (children.length === 0) {
+      subtreeH[id] = size.h;
+      return size.h;
+    }
+    let totalChildH = 0;
+    children.forEach((cid, i) => {
+      totalChildH += calcSubtreeHeight(cid, visited);
+      if (i < children.length - 1) totalChildH += V_GAP;
+    });
+    subtreeH[id] = Math.max(size.h, totalChildH);
+    return subtreeH[id];
+  }
+
+  // Phase 2: assign x,y positions (top-down)
+  function positionNode(id, x, yStart, visited) {
+    if (visited.has(id)) return;
+    visited.add(id);
+    const n = S.nodes.find(n => n.id === id);
+    if (!n) return;
+    const size = getNodeSize(id);
+    const myH = subtreeH[id] || size.h;
+
+    // Center this node vertically within its allocated subtree space
+    n.x = x;
+    n.y = yStart + (myH - size.h) / 2;
+
+    const children = (childrenOf[id] || []).filter(c => !visited.has(c));
+    if (children.length === 0) return;
+
+    // Position children to the right
+    const childX = x + size.w + H_GAP;
+    let childY = yStart;
+    children.forEach(cid => {
+      const cH = subtreeH[cid] || getNodeSize(cid).h;
+      positionNode(cid, childX, childY, visited);
+      childY += cH + V_GAP;
+    });
+  }
+
+  // Layout each tree root, stacking them vertically
+  const visited1 = new Set();
+  treeRoots.forEach(r => calcSubtreeHeight(r.id, visited1));
+
+  const startX = 100;
+  let startY = 100;
+  const visited2 = new Set();
+
+  treeRoots.forEach(root => {
+    positionNode(root.id, startX, startY, visited2);
+    startY += (subtreeH[root.id] || 50) + V_GAP * 2;
+  });
+
+  // Place disconnected nodes below all trees
+  disconnected.forEach((n, i) => {
+    n.x = startX + (i % 5) * 200;
+    n.y = startY + Math.floor(i / 5) * 80;
+  });
+
+  // Rebuild all nodes and redraw edges
+  S.nodes.forEach(n => buildNode(n.id));
+  drawEdges();
+
+  // Pan view to show the root
+  S.tx = 80;
+  S.ty = 80;
+  S.zoom = 1;
+  applyXform();
+
+  autoSave();
+  showToast('Auto layout applied');
 }
 
 // ────────────────────────────────────────────────────────
